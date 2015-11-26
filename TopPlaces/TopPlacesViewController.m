@@ -28,6 +28,7 @@
                                              [self.tableView reloadData];
                                                 }
                                          failure:^(AFHTTPRequestOperation * __nullable operation, NSError * __nonnull error) {
+                                             NSLog(@"error: %@", error);
                                                 }];
 }
 
@@ -46,6 +47,7 @@
     NSString *placesid = self.places[selectedRow][@"place_id"];
     PhotoListViewController *photoListVC = segue.destinationViewController;
     photoListVC.placesid = placesid;
+    photoListVC.title = self.places[selectedRow][@"_content"];
 }
 
 @end

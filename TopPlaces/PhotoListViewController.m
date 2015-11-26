@@ -38,16 +38,22 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"photoCell"];
-    cell.textLabel.text = self.photos[indexPath.row][@"title"];
-    cell.detailTextLabel.text = self.photos[indexPath.row][@"description"];
+    if ([self.photos[indexPath.row][@"title"] isEqual:@""]) {
+        cell.textLabel.text = @"N/A";
+    } else {
+        cell.textLabel.text = self.photos[indexPath.row][@"title"];
+    }
+    cell.detailTextLabel.text = self.photos[indexPath.row][@"description"][@"_content"];
     return cell;
+
 }
 
 - (void)prepareForSegue:(nonnull UIStoryboardSegue *)segue sender:(nullable id)sender {
     NSUInteger selectedRow = self.tableView.indexPathForSelectedRow.row;
-    NSString *urlStr = self.photos[selectedRow][@"imageURL"];
+    NSDictionary *photo = self.photos[selectedRow];
     ImageViewController *imageVC = segue.destinationViewController;
-    imageVC.imageURL = [NSURL URLWithString:urlStr];
+    imageVC.imageURL = [FlickrFetcher URLforPhoto:photo format:FlickrPhotoFormatLarge];
+    imageVC.title = self.photos[selectedRow][@"title"];
 }
 
 
